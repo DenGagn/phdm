@@ -17,10 +17,10 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 # Plot parameters
-#mpl.rcParams['ps.useafm'] = True
-#mpl.rcParams['text.usetex'] = True
-#mpl.rcParams['text.latex.preamble'] = [r"\usepackage{fourier}"]
-#mpl.rcParams['font.family'] = 'serif'
+mpl.rcParams['ps.useafm'] = True
+mpl.rcParams['text.usetex'] = True
+mpl.rcParams['text.latex.preamble'] = [r"\usepackage{fourier}"]
+mpl.rcParams['font.family'] = 'serif'
 mpl.rcParams['figure.figsize'] = (4,4)
 
 # Command line arguments
@@ -31,7 +31,7 @@ parser.set_defaults(polygon=True)
 
 args = parser.parse_args()
 
-# Load data
+# Load momentum map data
 kx = np.loadtxt('xvec.dat')
 ky = np.loadtxt('yvec.dat')
 kx_mat,ky_mat=np.meshgrid(kx,ky)
@@ -59,3 +59,18 @@ if (args.polygon == True):
 # Save figure
 f.tight_layout()
 plt.savefig('GrapheneSine_probability.png',dpi=300)
+
+# Load vector potential data
+gdata = np.loadtxt('potential.dat')
+
+# Plot vector potential
+mpl.rcParams['figure.figsize'] = (4,3)
+f = plt.figure()
+ax1 = f.add_subplot(111)
+ax1.plot(gdata[:,0], gdata[:,1], label=r'$G_x$', color='k', ls='-')
+ax1.plot(gdata[:,0], gdata[:,2], label=r'$G_y$', color='k', ls=':')
+ax1.set_xlabel(r'$t$ [s]')
+ax1.legend(loc='best')
+
+f.tight_layout()
+plt.savefig('GrapheneSine_potential.png',dpi=300)

@@ -113,12 +113,31 @@ int main(int argc, char *argv[])
 
     }
 
-    // Save data
+    // Save ODE integration data
     prob_mat.save("probability.dat", arma::raw_ascii);
 
     // Save parameters vector
     xvec.save("xvec.dat", arma::raw_ascii);
     yvec.save("yvec.dat", arma::raw_ascii);
+
+    // For post-processing: time evolution of vector potential after ODE integration
+    int numtimes = ceil((inttime-tinit)/dt);
+    auto times = arma::linspace(tinit,inttime,numtimes);
+
+    // Initialize output file
+    std::ofstream outfile("potential.dat");
+    outfile << std::scientific << std::setprecision(10);
+
+    // Create tight binding object
+    tight_binding_sine tb(0.0,0.0,omega,a,E0);
+
+    for (size_t i=0; i < numtimes; i++)
+    {
+        outfile << times(i) << " "
+                << tb.Gx(times(i)) << " "
+                << tb.Gy(times(i)) << std::endl;
+    }
+
 
     return 0;
 
