@@ -4,8 +4,8 @@ Python analysis file for GrapheneSine results.
 The excitation
 is a few-cycle sine wave with variable duration and amplitude, but zero
 carrier-envelope phase
-   
-Author:       Denis Gagnon                  <denisg6@hotmail.com> 
+
+Author:       Denis Gagnon                  <denisg6@hotmail.com>
 """
 
 import numpy as np
@@ -20,7 +20,7 @@ from matplotlib.patches import Polygon
 #mpl.rcParams['ps.useafm'] = True
 #mpl.rcParams['text.usetex'] = True
 #mpl.rcParams['text.latex.preamble'] = [r"\usepackage{fourier}"]
-mpl.rcParams['font.family'] = 'serif'
+#mpl.rcParams['font.family'] = 'serif'
 mpl.rcParams['figure.figsize'] = (4,4)
 
 # Command line arguments
@@ -40,7 +40,7 @@ prob_mat = np.loadtxt('probability.dat')
 # Plot transition probability (v.1)
 f = plt.figure()
 ax1 = f.add_subplot(111)
-ax1.pcolormesh(kx_mat,ky_mat,prob_mat,cmap='jet',shading='gouraud')
+ax1.pcolormesh(kx_mat,ky_mat,np.flipud(prob_mat),cmap='viridis',shading='gouraud')
 ax1.set_xlabel(r'$k_x a$')
 ax1.set_ylabel(r'$k_y a$')
 ax1.set_aspect(1.0)

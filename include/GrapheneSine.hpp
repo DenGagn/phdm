@@ -15,15 +15,19 @@ typedef std::vector< double > state_type; // Type of container used to hold the 
 */
 class tight_binding_sine {
 
+    // Parameters of the Hamiltonian
     double m_kx,m_ky,m_omega,m_a,m_E0;
 
 private:
+
+    // Physical constants definitions
     double hbar = 6.5821195140e-16;                             // Planck constant over 2 pi in eV s
     double lat_constant = 2.4e-10/sqrt(3.0);                    // Lattice constant in meters
     double v_Fermi = 0.003646*2.9979245800e+08;                 // Fermi velocity in graphene
     double time_constant = 2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
 
 public:
+    /// Constructor taking as input the parameters of the tight-binding Hamiltonian
     tight_binding_sine(double kx, double ky, double omega, double a, double E0 )
         : m_kx(kx)
         , m_ky(ky)
