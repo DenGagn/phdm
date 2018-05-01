@@ -25,7 +25,7 @@ LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 MESSAGE( STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
 
 # -- Required dependency: Boost.
-find_package(Boost 1.58.0 REQUIRED)
+find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 #SET (LIBS ${LIBS} ${Boost_LIBRARIES} )
 
