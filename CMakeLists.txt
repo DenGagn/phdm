@@ -1,12 +1,9 @@
 # --------------------------------------------------------------------------- #
-# Author:       Denis Gagnon                  <gagnon88@gmail.com>            #
+# Author:       Denis Gagnon                  <denisg6@hotmail.com>           #
 # Date created: 2018-05-01                                                    #
 # Description:  CMake compilation instructions for phdm                       #
 # ----------------------------------------------------------------------------#
 
-# ----------------------------------------------------------------- #
-# --                 Name and version of library                 -- #
-# ----------------------------------------------------------------- #
 project(phdm)
 
 # -- CMake version and installation directory.
