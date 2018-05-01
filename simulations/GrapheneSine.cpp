@@ -17,21 +17,14 @@
 #include <armadillo>
 #include <cmath>
 #include <complex>
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/numeric/odeint.hpp>
 
-typedef std::vector< double > state_type; // Type of container used to hold the state vector
-using namespace std::complex_literals; // Complex numbers
-
-
-#ifndef I_INCLUDE
-#define I_INCLUDE
-/// Imaginary unit
-arma::cx_double I(0.0,1.0);
-#endif
-
 #include "GrapheneSine.hpp"
+
+using namespace std::complex_literals; // Complex numbers
 
 /// Main function
 int main(int argc, char *argv[])

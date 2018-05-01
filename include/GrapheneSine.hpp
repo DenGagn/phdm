@@ -1,6 +1,8 @@
 #ifndef GRAPHENE_SINE_HPP
 #define GRAPHENE_SINE_HPP
 
+typedef std::vector< double > state_type; // Type of container used to hold the state vector
+
 /*!
 * \class tight_binding_sine
 *
