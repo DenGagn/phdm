@@ -4,7 +4,11 @@
 * \brief Tight-binding model for graphene photo-excitation
 * Solves the ODE system for a wave with a slowly varying envelope
 *
-* \author Author: D. Gagnon <gagnon88@gmail.com>
+* The excitation
+* is a few-cycle sine wave with variable duration and amplitude, but zero
+* carrier-envelope phase
+*
+* \author Author: D. Gagnon <denisg6@hotmail.com>
 */
 
 // Include some headers
@@ -98,7 +102,7 @@ int main(int argc, char *argv[])
             fina_psi[3] = sqrt(0.5)*(sin(angle_Gamma));
 
             // Initialize tight-binding model
-            tight_binding tb(xvec[id2],yvec[id],omega,a,E0);
+            tight_binding_sine tb(xvec[id2],yvec[id],omega,a,E0);
 
             // Integrate
             size_t steps = boost::numeric::odeint::integrate( tb,

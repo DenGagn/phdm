@@ -1,5 +1,18 @@
-/// Tight-binding model for graphene (RHS of ODE system)
-class tight_binding {
+#ifndef GRAPHENE_SINE_HPP
+#define GRAPHENE_SINE_HPP
+
+/*!
+* \class tight_binding_sine
+*
+* \brief Tight-binding model for graphene (RHS of ODE system)
+*
+* Tight-binding model for graphene (RHS of ODE system). The excitation
+* is a few-cycle sine wave with variable duration and amplitude, but zero
+* carrier-envelope phase
+*
+* \author Author: D. Gagnon <denisg6@hotmail.com>
+*/
+class tight_binding_sine {
 
     double m_kx,m_ky,m_omega,m_a,m_E0;
 
@@ -10,7 +23,7 @@ private:
     double time_constant = 2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
 
 public:
-    tight_binding(double kx, double ky, double omega, double a, double E0 )
+    tight_binding_sine(double kx, double ky, double omega, double a, double E0 )
         : m_kx(kx)
         , m_ky(ky)
         , m_omega(omega)
@@ -44,3 +57,4 @@ public:
 
     }
 };
+#endif
