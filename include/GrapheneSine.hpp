@@ -1,5 +1,4 @@
-#ifndef GRAPHENE_SINE_HPP
-#define GRAPHENE_SINE_HPP
+#pragma once
 
 typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
@@ -59,4 +58,3 @@ public:
 
     }
 };
-#endif
