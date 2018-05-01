@@ -8,7 +8,7 @@ typedef std::vector< double > state_type; // Type of container used to hold the 
 *
 * \brief Tight-binding model for graphene (RHS of ODE system)
 *
-* Tight-binding model for graphene (RHS of ODE system). The excitation
+* The excitation
 * is a few-cycle sine wave with variable duration and amplitude, but zero
 * carrier-envelope phase
 *
