@@ -35,30 +35,53 @@ public:
         , m_a(a)
         , m_E0(E0) { }
 
+    /// Overload of operator() for ODE integration
     void operator() ( const state_type &z, state_type &dzdt, const double t)
     {
-
-        // Compute the normalized vector potential (polarization in x direction)
-        double Gx = 0.25*m_omega*(sin((2.0*m_a-m_omega)*t)/(2.0*m_a-m_omega)
-                                  + sin((2.0*m_a+m_omega)*t)/(2.0*m_a+m_omega)
-                                  - 2.0*sin(m_omega*t)/m_omega);
 
         // Conversion factor
         double factor = lat_constant*m_E0/(hbar*m_omega);
 
         // Peierls substitution
-        double kx_field = m_kx + factor*Gx;
+        double kx_field = m_kx + factor*Gx(t);
         double ky_field = m_ky + 0.0;
 
         // Compute gamma factors
-        double Re_Gamma = 1.0 + 2.0*cos(0.5*sqrt(3.0)*kx_field)*cos(0.5*3.0*ky_field);
-        double Im_Gamma = 2.0*cos(0.5*sqrt(3.0)*kx_field)*sin(0.5*3.0*ky_field);
+        double Re_Gamma_t = Re_Gamma(kx_field, ky_field);
+        double Im_Gamma_t = Im_Gamma(kx_field, ky_field);
 
         // The ODE system
-        dzdt[0] = time_constant*( Re_Gamma*z[3] - Im_Gamma*z[2]); // RePsi_A
-        dzdt[1] = time_constant*(-Re_Gamma*z[2] - Im_Gamma*z[3]); // ImPsi_A
-        dzdt[2] = time_constant*( Re_Gamma*z[1] + Im_Gamma*z[0]); // RePsi_B
-        dzdt[3] = time_constant*(-Re_Gamma*z[0] + Im_Gamma*z[1]); // ImPsi_B
+        dzdt[0] = time_constant*( Re_Gamma_t*z[3] - Im_Gamma_t*z[2]); // RePsi_A
+        dzdt[1] = time_constant*(-Re_Gamma_t*z[2] - Im_Gamma_t*z[3]); // ImPsi_A
+        dzdt[2] = time_constant*( Re_Gamma_t*z[1] + Im_Gamma_t*z[0]); // RePsi_B
+        dzdt[3] = time_constant*(-Re_Gamma_t*z[0] + Im_Gamma_t*z[1]); // ImPsi_B
 
+    }
+
+    /// Normalized vector potential, x-component
+    double Gx (double t)
+    {
+
+        return 0.25*m_omega*(sin((2.0*m_a-m_omega)*t)/(2.0*m_a-m_omega)
+                             + sin((2.0*m_a+m_omega)*t)/(2.0*m_a+m_omega)
+                             - 2.0*sin(m_omega*t)/m_omega);
+    }
+
+    /// Normalized vector potential, y-component
+    double Gy (double t)
+    {
+        return 0.0;
+    }
+
+    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    double Re_Gamma (double kx, double ky)
+    {
+        return 1.0 + 2.0*cos(0.5*sqrt(3.0)*kx)*cos(0.5*3.0*ky);
+    }
+
+    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    double Im_Gamma (double kx, double ky)
+    {
+        return 2.0*cos(0.5*sqrt(3.0)*kx)*sin(0.5*3.0*ky);
     }
 };

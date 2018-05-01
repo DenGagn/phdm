@@ -68,43 +68,43 @@ int main(int argc, char *argv[])
     // Variables for loops
     unsigned id, id2;
 
-    // Loop for each K va1ilue and compute probability
+    // Loop for each K value and compute probability
     for (id=0; id < y_elem; id++)
     {
         for (id2=0; id2 < x_elem; id2++)
         {
 
-            // Prepare initial state
-            double Re_Gamma = 1.0 + 2.0*cos(0.5*sqrt(3.0)*xvec[id2])*cos(0.5*3.0*yvec[id]);
-            double Im_Gamma = 2.0*cos(0.5*sqrt(3.0)*xvec[id2])*sin(0.5*3.0*yvec[id]);
-            double angle_Gamma = atan2(Im_Gamma,Re_Gamma);
-
-            state_type init_psi = {0.0,0.0,0.0,0.0};
-            state_type fina_psi = {0.0,0.0,0.0,0.0};
-
-            // Assign values of initial state (the ket)
-            init_psi[0] = sqrt(0.5);
-            init_psi[1] = 0.0;
-            init_psi[2] = -sqrt(0.5)*(cos(angle_Gamma));
-            init_psi[3] = -sqrt(0.5)*(sin(angle_Gamma));
-
-            // Assign values of final state (the bra)
-            fina_psi[0] = sqrt(0.5);
-            fina_psi[1] = 0.0;
-            fina_psi[2] = sqrt(0.5)*(cos(angle_Gamma));
-            fina_psi[3] = sqrt(0.5)*(sin(angle_Gamma));
-
             // Initialize tight-binding model
             tight_binding_sine tb(xvec[id2],yvec[id],omega,a,E0);
 
+            // Prepare initial state (calculate gamma factor and its angles)
+            double Re_Gamma = tb.Re_Gamma(xvec[id2], yvec[id]);
+            double Im_Gamma = tb.Im_Gamma(xvec[id2], yvec[id]);
+            double angle_Gamma = atan2(Im_Gamma,Re_Gamma);
+
+            state_type psi = {0.0,0.0,0.0,0.0};
+            state_type eigen_p = {0.0,0.0,0.0,0.0};
+
+            // Assign values of initial state (the ket)
+            psi[0] = sqrt(0.5);
+            psi[1] = 0.0;
+            psi[2] = -sqrt(0.5)*(cos(angle_Gamma));
+            psi[3] = -sqrt(0.5)*(sin(angle_Gamma));
+
+            // Assign values of positive energy state (the bra)
+            eigen_p[0] = sqrt(0.5);
+            eigen_p[1] = 0.0;
+            eigen_p[2] = sqrt(0.5)*(cos(angle_Gamma));
+            eigen_p[3] = sqrt(0.5)*(sin(angle_Gamma));
+
             // Integrate
             size_t steps = boost::numeric::odeint::integrate( tb,
-                           init_psi, tinit, inttime, dt );
+                           psi, tinit, inttime, dt );
 
             // Calculate the projection
             std::complex<double> projection =
-                (fina_psi[0] - 1i*fina_psi[1])*(init_psi[0] + 1i*init_psi[1]) +
-                (fina_psi[2] - 1i*fina_psi[3])*(init_psi[2] + 1i*init_psi[3]);
+                (eigen_p[0] - 1i*eigen_p[1])*(psi[0] + 1i*psi[1]) +
+                (eigen_p[2] - 1i*eigen_p[3])*(psi[2] + 1i*psi[3]);
 
             prob_mat(id,id2) = std::abs(projection)*std::abs(projection);
 
