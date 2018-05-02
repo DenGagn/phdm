@@ -8,7 +8,7 @@ project(phdm)
 
 # -- CMake version and installation directory.
 # CMake version
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 2.8)
 
 # C++14 Standard required
 set(CMAKE_CXX_STANDARD 14)
@@ -65,7 +65,7 @@ endif()
 # -- Included files
 include_directories (${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# -- Install mellotron headers
+# -- Install headers
 install (DIRECTORY include/          DESTINATION include)
 
 # -- Output binaries in directory
@@ -80,4 +80,3 @@ install(TARGETS "GrapheneSine.o" RUNTIME DESTINATION bin)
 add_executable("GrapheneExp.o" "simulations/GrapheneExp.cpp")
 target_link_libraries("GrapheneExp.o" ${LIBS})
 install(TARGETS "GrapheneExp.o" RUNTIME DESTINATION bin)
-
