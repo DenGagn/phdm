@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
     yvec.save("yvec.dat", arma::raw_ascii);
 
     // For post-processing: time evolution of vector potential after ODE integration
-    int numtimes = ceil((inttime-tinit)/dt);
-    auto times = arma::linspace(tinit,inttime,numtimes);
+    int numtimes = ceil(inttime/dt);
+    auto times = arma::linspace(tinit,tinit+inttime,numtimes);
 
     // Initialize output file
     std::ofstream outfile("potential.dat");
