@@ -76,3 +76,8 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/simulations)
 add_executable("GrapheneSine.o" "simulations/GrapheneSine.cpp")
 target_link_libraries("GrapheneSine.o" ${LIBS})
 install(TARGETS "GrapheneSine.o" RUNTIME DESTINATION bin)
+
+add_executable("GrapheneExp.o" "simulations/GrapheneExp.cpp")
+target_link_libraries("GrapheneExp.o" ${LIBS})
+install(TARGETS "GrapheneExp.o" RUNTIME DESTINATION bin)
+
