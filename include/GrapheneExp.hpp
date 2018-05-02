@@ -28,6 +28,10 @@ private:
 
 public:
     /// Constructor taking as input the parameters of the tight-binding Hamiltonian
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param tau float, duration of the exponential pulse in fs
+    /// @param E0 float, electric field peak value in V/m
     tight_binding_exp(double kx, double ky, double tau, double E0 )
         : m_kx(kx)
         , m_ky(ky)

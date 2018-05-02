@@ -28,6 +28,11 @@ private:
 
 public:
     /// Constructor taking as input the parameters of the tight-binding Hamiltonian
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param omega float, angular frequency of the field in rad/s
+    /// @param a float, envelope frequency (normalized)
+    /// @param E0 float, electric field peak value in V/m
     tight_binding_sine(double kx, double ky, double omega, double a, double E0 )
         : m_kx(kx)
         , m_ky(ky)
