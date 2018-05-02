@@ -58,7 +58,7 @@ if (args.polygon == True):
 
 # Save figure
 f.tight_layout()
-plt.savefig('GrapheneSine_probability.png',dpi=300)
+plt.savefig('probability.png',dpi=300)
 
 # Load vector potential data
 gdata = np.loadtxt('potential.dat')
@@ -73,4 +73,4 @@ ax1.set_xlabel(r'$t$ [s]')
 ax1.legend(loc='best')
 
 f.tight_layout()
-plt.savefig('GrapheneSine_potential.png',dpi=300)
+plt.savefig('potential.png',dpi=300)
