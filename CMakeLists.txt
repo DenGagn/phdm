@@ -84,3 +84,7 @@ install(TARGETS "GrapheneSineDirac.o" RUNTIME DESTINATION bin)
 add_executable("GrapheneExp.o" "simulations/GrapheneExp.cpp")
 target_link_libraries("GrapheneExp.o" ${LIBS})
 install(TARGETS "GrapheneExp.o" RUNTIME DESTINATION bin)
+
+add_executable("GrapheneExpDirac.o" "simulations/GrapheneExpDirac.cpp")
+target_link_libraries("GrapheneExpDirac.o" ${LIBS})
+install(TARGETS "GrapheneExpDirac.o" RUNTIME DESTINATION bin)
