@@ -113,3 +113,38 @@ public:
         return 2.0*cos(0.5*sqrt(3.0)*kx)*sin(0.5*3.0*ky);
     }
 };
+
+/*!
+* \class dirac_exp
+*
+* \brief Dirac model for graphene (RHS of ODE system)
+*
+* The excitation
+* is a slowly varying envelope with exponential shape
+* See e.g. http://link.aps.org/doi/10.1103/PhysRevB.91.045439
+*
+* \author Author: D. Gagnon <denisg6@hotmail.com>
+*/
+class dirac_exp : public base_exp {
+
+public:
+    /// Constructor taking as input the parameters of the Hamiltonian (Dirac specialization)
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param tau float, duration of the exponential pulse in fs
+    /// @param E0 float, electric field peak value in V/m
+    dirac_exp(double kx, double ky, double tau, double E0 ) :
+        base_exp(kx, ky, tau, E0 ) {}
+
+    /// Real part of gamma factor appearing in the Dirac Hamiltonian
+    double Re_Gamma (double kx, double ky)
+    {
+        return 1.5*kx;
+    }
+
+    /// Imaginary part of gamma factor appearing in the Dirac Hamiltonian
+    double Im_Gamma (double kx, double ky)
+    {
+        return 1.5*ky;
+    }
+};
