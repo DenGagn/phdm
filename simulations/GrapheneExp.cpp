@@ -71,11 +71,11 @@ int main(int argc, char *argv[])
         {
 
             // Initialize tight-binding model
-            tight_binding_exp tb(xvec[id2],yvec[id],tau,E0);
+            tight_binding_exp model(xvec[id2],yvec[id],tau,E0);
 
             // Prepare initial state (calculate gamma factor and its angles)
-            double Re_Gamma = tb.Re_Gamma(xvec[id2], yvec[id]);
-            double Im_Gamma = tb.Im_Gamma(xvec[id2], yvec[id]);
+            double Re_Gamma = model.Re_Gamma(xvec[id2], yvec[id]);
+            double Im_Gamma = model.Im_Gamma(xvec[id2], yvec[id]);
             double angle_Gamma = atan2(Im_Gamma,Re_Gamma);
 
             state_type psi = {0.0,0.0,0.0,0.0};
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
             eigen_p[3] = sqrt(0.5)*(sin(angle_Gamma));
 
             // Integrate
-            size_t steps = boost::numeric::odeint::integrate( tb,
+            size_t steps = boost::numeric::odeint::integrate( model,
                            psi, tinit, inttime, dt );
 
             // Calculate the projection
@@ -125,13 +125,13 @@ int main(int argc, char *argv[])
     outfile << std::scientific << std::setprecision(10);
 
     // Create tight binding object
-    tight_binding_exp tb(0.0,0.0,tau,E0);
+    tight_binding_exp model(0.0,0.0,tau,E0);
 
     for (size_t i=0; i < numtimes; i++)
     {
         outfile << times(i) << " "
-                << tb.Gx(times(i)) << " "
-                << tb.Gy(times(i)) << std::endl;
+                << model.Gx(times(i)) << " "
+                << model.Gy(times(i)) << std::endl;
     }
 
 
