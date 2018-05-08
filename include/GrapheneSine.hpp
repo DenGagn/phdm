@@ -25,7 +25,7 @@ private:
 
 public:
 
-    /// Constructor taking as input the parameters of the Hamiltonian (tight-binding or Dirac)
+    /// Constructor taking as input the parameters of the Hamiltonian
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
     /// @param omega float, angular frequency of the field in rad/s
@@ -38,10 +38,10 @@ public:
         , m_a(a)
         , m_E0(E0) { }
 
-    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Real part of gamma factor appearing in the Hamiltonian
     virtual double Re_Gamma (double, double) = 0;
 
-    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Imaginary part of gamma factor appearing in the Hamiltonian
     virtual double Im_Gamma (double, double) = 0;
 
     /// Overload of operator() for ODE integration
@@ -100,7 +100,7 @@ public:
 class tight_binding_sine : public base_sine {
 
 public:
-    /// Constructor taking as input the parameters of the sine excitation
+    /// Constructor taking as input the parameters of the  Hamiltonian (tight-binding specialization)
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
     /// @param omega float, angular frequency of the field in rad/s
@@ -137,7 +137,7 @@ public:
 class dirac_sine : public base_sine {
 
 public:
-    /// Constructor taking as input the parameters of the sine excitation
+    /// Constructor taking as input the parameters of the Hamiltonian (Dirac specialization)
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
     /// @param omega float, angular frequency of the field in rad/s
@@ -146,13 +146,13 @@ public:
     dirac_sine(double kx, double ky, double omega, double a, double E0 ) :
         base_sine(kx, ky, omega, a, E0 ) {}
 
-    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Real part of gamma factor appearing in the Dirac Hamiltonian
     double Re_Gamma (double kx, double ky)
     {
         return 1.5*kx;
     }
 
-    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Imaginary part of gamma factor appearing in the Dirac Hamiltonian
     double Im_Gamma (double kx, double ky)
     {
         return 1.5*ky;

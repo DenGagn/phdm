@@ -24,7 +24,7 @@ private:
     double time_constant = 2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
 
 public:
-    /// Constructor taking as input the parameters of the tight-binding Hamiltonian
+    /// Constructor taking as input the parameters of the Hamiltonian
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
     /// @param tau float, duration of the exponential pulse in fs
@@ -35,10 +35,10 @@ public:
         , m_tau(tau)
         , m_E0(E0) { }
 
-    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Real part of gamma factor appearing in the Hamiltonian
     virtual double Re_Gamma (double, double) = 0;
 
-    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    /// Imaginary part of gamma factor appearing in the Hamiltonian
     virtual double Im_Gamma (double, double) = 0;
 
     /// Overload of operator() for ODE integration
@@ -93,11 +93,10 @@ public:
 class tight_binding_exp : public base_exp {
 
 public:
-    /// Constructor taking as input the parameters of the sine excitation
+    /// Constructor taking as input the parameters of the Hamiltonian (tight-binding specialization)
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
-    /// @param omega float, angular frequency of the field in rad/s
-    /// @param a float, envelope frequency (normalized)
+    /// @param tau float, duration of the exponential pulse in fs
     /// @param E0 float, electric field peak value in V/m
     tight_binding_exp(double kx, double ky, double tau, double E0 ) :
         base_exp(kx, ky, tau, E0 ) {}
