@@ -74,6 +74,9 @@ public:
         return 0.25*m_omega*(sin((2.0*m_a-m_omega)*t)/(2.0*m_a-m_omega)
                              + sin((2.0*m_a+m_omega)*t)/(2.0*m_a+m_omega)
                              - 2.0*sin(m_omega*t)/m_omega);
+
+        // Version used in 10.1364/JOSAB.35.000958
+        // return sin(m_omega*t)*sin(m_a*t)*sin(m_a*t);
     }
 
     /// Normalized vector potential, y-component
