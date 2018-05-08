@@ -2,7 +2,7 @@
 * \file GrapheneSine.cpp
 *
 * \brief Tight-binding model for graphene photo-excitation
-* Solves the ODE system for a wave with a slowly varying envelope
+* Solves the ODE system for a wave with a slowly varying envelope (sine)
 *
 * The excitation
 * is a few-cycle sine wave with variable duration and amplitude, but zero

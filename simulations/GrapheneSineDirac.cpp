@@ -1,7 +1,7 @@
 /*!
 * \file GrapheneSineDirac.cpp
 *
-* \brief Tight-binding model for graphene photo-excitation
+* \brief Dirac model for graphene photo-excitation
 * Solves the ODE system for a wave with a slowly varying envelope
 *
 * The excitation
