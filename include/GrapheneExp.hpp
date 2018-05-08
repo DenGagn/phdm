@@ -3,17 +3,14 @@
 typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
 /*!
-* \class tight_binding_exp
+* \class base_exp
 *
-* \brief Tight-binding model for graphene (RHS of ODE system)
-*
-* The excitation
-* is a slowly varying envelope with exponential shape
+* \brief Base class for a slowly varying envelope with exponential shape
 * See e.g. http://link.aps.org/doi/10.1103/PhysRevB.91.045439
 *
 * \author Author: D. Gagnon <denisg6@hotmail.com>
 */
-class tight_binding_exp {
+class base_exp {
 
     // Parameters of the Hamiltonian
     double m_kx,m_ky,m_tau,m_E0;
@@ -32,11 +29,17 @@ public:
     /// @param ky float, y-component of the momentum
     /// @param tau float, duration of the exponential pulse in fs
     /// @param E0 float, electric field peak value in V/m
-    tight_binding_exp(double kx, double ky, double tau, double E0 )
+    base_exp(double kx, double ky, double tau, double E0 )
         : m_kx(kx)
         , m_ky(ky)
         , m_tau(tau)
         , m_E0(E0) { }
+
+    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    virtual double Re_Gamma (double, double) = 0;
+
+    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    virtual double Im_Gamma (double, double) = 0;
 
     /// Overload of operator() for ODE integration
     void operator() ( const state_type &z, state_type &dzdt, const double t)
@@ -64,7 +67,6 @@ public:
     /// Normalized vector potential, x-component
     double Gx (double t)
     {
-
         return 0.0;
     }
 
@@ -73,6 +75,32 @@ public:
     {
         return exp(-(t/m_tau)*(t/m_tau))*(t/m_tau);
     }
+
+
+};
+
+/*!
+* \class tight_binding_exp
+*
+* \brief Tight-binding model for graphene (RHS of ODE system)
+*
+* The excitation
+* is a slowly varying envelope with exponential shape
+* See e.g. http://link.aps.org/doi/10.1103/PhysRevB.91.045439
+*
+* \author Author: D. Gagnon <denisg6@hotmail.com>
+*/
+class tight_binding_exp : public base_exp {
+
+public:
+    /// Constructor taking as input the parameters of the sine excitation
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param omega float, angular frequency of the field in rad/s
+    /// @param a float, envelope frequency (normalized)
+    /// @param E0 float, electric field peak value in V/m
+    tight_binding_exp(double kx, double ky, double tau, double E0 ) :
+        base_exp(kx, ky, tau, E0 ) {}
 
     /// Real part of gamma factor appearing in the tight-binding Hamiltonian
     double Re_Gamma (double kx, double ky)
