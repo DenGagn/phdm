@@ -3,17 +3,14 @@
 typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
 /*!
-* \class tight_binding_sine
+* \class base_sine
 *
-* \brief Tight-binding model for graphene (RHS of ODE system)
-*
-* The excitation
-* is a few-cycle sine wave with variable duration and amplitude, but zero
-* carrier-envelope phase
+* \brief Base class for a few-cycle sine wave with variable duration and
+* amplitude, but zero carrier-envelope phase
 *
 * \author Author: D. Gagnon <denisg6@hotmail.com>
 */
-class tight_binding_sine {
+class base_sine {
 
     // Parameters of the Hamiltonian
     double m_kx,m_ky,m_omega,m_a,m_E0;
@@ -27,18 +24,25 @@ private:
     double time_constant = 2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
 
 public:
-    /// Constructor taking as input the parameters of the tight-binding Hamiltonian
+
+    /// Constructor taking as input the parameters of the Hamiltonian (tight-binding or Dirac)
     /// @param kx float, x-component of the momentum
     /// @param ky float, y-component of the momentum
     /// @param omega float, angular frequency of the field in rad/s
     /// @param a float, envelope frequency (normalized)
     /// @param E0 float, electric field peak value in V/m
-    tight_binding_sine(double kx, double ky, double omega, double a, double E0 )
+    base_sine(double kx, double ky, double omega, double a, double E0 )
         : m_kx(kx)
         , m_ky(ky)
         , m_omega(omega)
         , m_a(a)
         , m_E0(E0) { }
+
+    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    virtual double Re_Gamma (double, double) = 0;
+
+    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    virtual double Im_Gamma (double, double) = 0;
 
     /// Overload of operator() for ODE integration
     void operator() ( const state_type &z, state_type &dzdt, const double t)
@@ -78,6 +82,30 @@ public:
         return 0.0;
     }
 
+};
+
+/*!
+* \class tight_binding_sine
+*
+* \brief Tight-binding model for graphene (RHS of ODE system)
+*
+* The excitation
+* is a few-cycle sine wave with variable duration and amplitude, but zero
+* carrier-envelope phase
+*
+*/
+class tight_binding_sine : public base_sine {
+
+public:
+    /// Constructor taking as input the parameters of the sine excitation
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param omega float, angular frequency of the field in rad/s
+    /// @param a float, envelope frequency (normalized)
+    /// @param E0 float, electric field peak value in V/m
+    tight_binding_sine(double kx, double ky, double omega, double a, double E0 ) :
+        base_sine(kx, ky, omega, a, E0 ) {}
+
     /// Real part of gamma factor appearing in the tight-binding Hamiltonian
     double Re_Gamma (double kx, double ky)
     {
@@ -89,4 +117,43 @@ public:
     {
         return 2.0*cos(0.5*sqrt(3.0)*kx)*sin(0.5*3.0*ky);
     }
+
+
+};
+
+/*!
+* \class dirac_sine
+*
+* \brief Dirac model for graphene (RHS of ODE system)
+*
+* The excitation
+* is a few-cycle sine wave with variable duration and amplitude, but zero
+* carrier-envelope phase
+*
+*/
+class dirac_sine : public base_sine {
+
+public:
+    /// Constructor taking as input the parameters of the sine excitation
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param omega float, angular frequency of the field in rad/s
+    /// @param a float, envelope frequency (normalized)
+    /// @param E0 float, electric field peak value in V/m
+    dirac_sine(double kx, double ky, double omega, double a, double E0 ) :
+        base_sine(kx, ky, omega, a, E0 ) {}
+
+    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
+    double Re_Gamma (double kx, double ky)
+    {
+        return 1.5*kx;
+    }
+
+    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+    double Im_Gamma (double kx, double ky)
+    {
+        return 1.5*ky;
+    }
+
+
 };
