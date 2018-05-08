@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
         for (id2=0; id2 < x_elem; id2++)
         {
 
-            // Initialize tight-binding model
+            // Initialize model (Dirac)
             dirac_sine model(xvec[id2],yvec[id],omega,a,E0);
 
             // Prepare initial state (calculate gamma factor and its angles)
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     std::ofstream outfile("potential.dat");
     outfile << std::scientific << std::setprecision(10);
 
-    // Create tight binding object
+    // Create model object (Dirac)
     dirac_sine model(0.0,0.0,omega,a,E0);
 
     for (size_t i=0; i < numtimes; i++)
