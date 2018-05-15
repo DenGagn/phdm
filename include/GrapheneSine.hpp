@@ -13,7 +13,7 @@ typedef std::vector< double > state_type; // Type of container used to hold the 
 class base_sine {
 
     // Parameters of the Hamiltonian
-    double m_kx,m_ky,m_omega,m_a,m_E0;
+    double m_kx,m_ky,m_omega,m_a,m_E0,m_ellip;
 
 private:
 
@@ -31,12 +31,14 @@ public:
     /// @param omega float, angular frequency of the field in rad/s
     /// @param a float, envelope frequency (normalized)
     /// @param E0 float, electric field peak value in V/m
-    base_sine(double kx, double ky, double omega, double a, double E0 )
+    /// @param ellip float, ellipticity of the field in the circularly polarized case
+    base_sine(double kx, double ky, double omega, double a, double E0, double ellip=0.0 )
         : m_kx(kx)
         , m_ky(ky)
         , m_omega(omega)
         , m_a(a)
-        , m_E0(E0) { }
+        , m_E0(E0)
+        , m_ellip(ellip) { }
 
     /// Real part of gamma factor appearing in the Hamiltonian
     virtual double Re_Gamma (double, double) = 0;
@@ -53,7 +55,7 @@ public:
 
         // Peierls substitution
         double kx_field = m_kx + factor*Gx(t);
-        double ky_field = m_ky + 0.0;
+        double ky_field = m_ky + m_ellip*factor*Gy(t);
 
         // Compute gamma factors
         double Re_Gamma_t = Re_Gamma(kx_field, ky_field);
@@ -75,13 +77,14 @@ public:
                              + sin((2.0*m_a+m_omega)*t)/(2.0*m_a+m_omega)
                              - 2.0*sin(m_omega*t)/m_omega);
 
-        // Version used in 10.1364/JOSAB.35.000958
-        // return sin(m_omega*t)*sin(m_a*t)*sin(m_a*t);
+//         // Version used in 10.1364/JOSAB.35.000958
+//         return sin(m_omega*t)*sin(m_a*t)*sin(m_a*t);
     }
 
     /// Normalized vector potential, y-component
     double Gy (double t)
     {
+//         return cos(m_omega*t)*sin(m_a*t)*sin(m_a*t);
         return 0.0;
     }
 
@@ -106,8 +109,9 @@ public:
     /// @param omega float, angular frequency of the field in rad/s
     /// @param a float, envelope frequency (normalized)
     /// @param E0 float, electric field peak value in V/m
-    tight_binding_sine(double kx, double ky, double omega, double a, double E0 ) :
-        base_sine(kx, ky, omega, a, E0 ) {}
+    /// @param ellip float, ellipticity of the field in the circularly polarized case
+    tight_binding_sine(double kx, double ky, double omega, double a, double E0, double ellip=0.0 ) :
+        base_sine(kx, ky, omega, a, E0, ellip ) {}
 
     /// Real part of gamma factor appearing in the tight-binding Hamiltonian
     double Re_Gamma (double kx, double ky)
@@ -143,17 +147,18 @@ public:
     /// @param omega float, angular frequency of the field in rad/s
     /// @param a float, envelope frequency (normalized)
     /// @param E0 float, electric field peak value in V/m
-    dirac_sine(double kx, double ky, double omega, double a, double E0 ) :
-        base_sine(kx, ky, omega, a, E0 ) {}
+    /// @param ellip float, ellipticity of the field in the circularly polarized case
+    dirac_sine(double kx, double ky, double omega, double a, double E0, double ellip=0.0 ) :
+        base_sine(kx, ky, omega, a, E0, ellip ) {}
 
     /// Real part of gamma factor appearing in the Dirac Hamiltonian
-    double Re_Gamma (double kx, double ky)
+    double Re_Gamma (double kx, double)
     {
         return 1.5*kx;
     }
 
     /// Imaginary part of gamma factor appearing in the Dirac Hamiltonian
-    double Im_Gamma (double kx, double ky)
+    double Im_Gamma (double, double ky)
     {
         return 1.5*ky;
     }
