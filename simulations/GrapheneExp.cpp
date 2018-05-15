@@ -23,8 +23,7 @@
 #include <boost/numeric/odeint.hpp>
 
 #include "GrapheneExp.hpp"
-
-using namespace std::complex_literals; // Complex numbers
+#include "Utils.hpp"
 
 /// Main function
 int main(int argc, char *argv[])
@@ -56,7 +55,7 @@ int main(int argc, char *argv[])
     auto prob_mat = arma::mat(y_elem,x_elem);
 
     // Initial value of time, integration time and interval
-    
+
     double tinit = -4.0*tau;
     double inttime = 8.0*tau;
     double dt = inttime/100;
@@ -73,34 +72,16 @@ int main(int argc, char *argv[])
             // Initialize tight-binding model
             tight_binding_exp model(xvec[id2],yvec[id],tau,E0);
 
-            // Prepare initial state (calculate gamma factor and its angles)
-            double Re_Gamma = model.Re_Gamma(xvec[id2], yvec[id]);
-            double Im_Gamma = model.Im_Gamma(xvec[id2], yvec[id]);
-            double angle_Gamma = atan2(Im_Gamma,Re_Gamma);
-
-            state_type psi = {0.0,0.0,0.0,0.0};
-            state_type eigen_p = {0.0,0.0,0.0,0.0};
-
-            // Assign values of initial state (the ket)
-            psi[0] = sqrt(0.5);
-            psi[1] = 0.0;
-            psi[2] = -sqrt(0.5)*(cos(angle_Gamma));
-            psi[3] = -sqrt(0.5)*(sin(angle_Gamma));
-
-            // Assign values of positive energy state (the bra)
-            eigen_p[0] = sqrt(0.5);
-            eigen_p[1] = 0.0;
-            eigen_p[2] = sqrt(0.5)*(cos(angle_Gamma));
-            eigen_p[3] = sqrt(0.5)*(sin(angle_Gamma));
+            // Prepare initial states (negative and positive eigenstates)
+            state_type psi = EigenState(model, xvec[id2], yvec[id], -1.0);
+            state_type eigen_p = EigenState(model, xvec[id2], yvec[id], 1.0);
 
             // Integrate
             size_t steps = boost::numeric::odeint::integrate( model,
                            psi, tinit, inttime, dt );
 
             // Calculate the projection
-            std::complex<double> projection =
-                (eigen_p[0] - 1i*eigen_p[1])*(psi[0] + 1i*psi[1]) +
-                (eigen_p[2] - 1i*eigen_p[3])*(psi[2] + 1i*psi[3]);
+            std::complex<double> projection = Projection(eigen_p,psi);
 
             prob_mat(id,id2) = std::abs(projection)*std::abs(projection);
 
