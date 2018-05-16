@@ -21,7 +21,7 @@ private:
     double hbar = 6.5821195140e-16;                             // Planck constant over 2 pi in eV s
     double lat_constant = 2.4e-10/sqrt(3.0);                    // Lattice constant in meters
     double v_Fermi = 0.003646*2.9979245800e+08;                 // Fermi velocity in graphene
-    double time_constant = 2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
+    double time_constant = -2.0*v_Fermi / (3.0*lat_constant);    // Time constant in the differential equation (in reciprocal seconds)
 
 public:
 
@@ -154,13 +154,13 @@ public:
     /// Real part of gamma factor appearing in the Dirac Hamiltonian
     double Re_Gamma (double kx, double)
     {
-        return 1.5*kx;
+        return -1.5*kx;
     }
 
     /// Imaginary part of gamma factor appearing in the Dirac Hamiltonian
     double Im_Gamma (double, double ky)
     {
-        return 1.5*ky;
+        return -1.5*ky;
     }
 
 
