@@ -29,7 +29,7 @@ state_type EigenState(T model, double kx, double ky, double sign=1.0)
 
         // Assign values of initial state (the ket)
         eigen[0] = sqrt(0.5);
-        eigen[1] = 0.0;
+        // eigen[1] = 0.0;
         eigen[2] = sign*sqrt(0.5)*(cos(angle_Gamma));
         eigen[3] = sign*sqrt(0.5)*(sin(angle_Gamma));
         
