@@ -2,7 +2,7 @@
 /*!
 * \file GrapheneFloquet.hpp
 *
-* \brief Functions calculating gamma factors (Fourier coefficients) for Floquet Hamiltonian
+* \brief Functions associated to Floquet Hamiltonian calculations
 *
 * \author Author: D. Gagnon <denisg6@hotmail.com>
 */
@@ -216,7 +216,7 @@ arma::vec QuasiEnergies(double kx, double ky, double omega, double E0,
         std::cout << "Eigenvalue decomposition failed" << std::endl;
     }
 
-    std::cout << eigvec << std::endl;
+    // std::cout << eigvec << std::endl;
 
     // COMPUTE TRANSITION PROBABILITY
 
