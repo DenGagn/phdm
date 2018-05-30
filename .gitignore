@@ -148,3 +148,10 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/c++,cmake,python
+
+# Other stuff to ignore
+vgcore*
+*.orig
+*.dat
+*.png
+doc/
