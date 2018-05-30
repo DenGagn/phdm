@@ -73,7 +73,7 @@ public:
     /// Normalized vector potential, y-component
     double Gy (double t)
     {
-        return exp(-(t/m_tau)*(t/m_tau))*(t/m_tau);
+        return -exp(-(t/m_tau)*(t/m_tau))*(t/m_tau);
     }
 
 
