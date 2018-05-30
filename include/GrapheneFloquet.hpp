@@ -1,18 +1,32 @@
+#pragma once
 /*!
-* \file GammaFactor.hpp
+* \file GrapheneFloquet.hpp
 *
 * \brief Functions calculating gamma factors (Fourier coefficients) for Floquet Hamiltonian
 *
 * \author Author: D. Gagnon <denisg6@hotmail.com>
 */
 // Include some headers
-#include <cmath>
 #include <complex>
+#include <armadillo>
 #include <boost/numeric/odeint.hpp>
 
-using namespace std::complex_literals; // Complex numbers
+using namespace std::complex_literals; // Complex literals
+
 typedef std::complex<double> c_state_type; // Type of container used to hold the state vector
 typedef boost::numeric::odeint::runge_kutta_cash_karp54< c_state_type > error_stepper_type; // Error stepper for odeint
+
+/// Real part of gamma factor appearing in the tight-binding Hamiltonian
+double Re_Gamma (double kx, double ky)
+{
+    return 1.0 + 2.0*cos(0.5*sqrt(3.0)*kx)*cos(0.5*3.0*ky);
+}
+
+/// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
+double Im_Gamma (double kx, double ky)
+{
+    return 2.0*cos(0.5*sqrt(3.0)*kx)*sin(0.5*3.0*ky);
+}
 
 /*!
 * \class gamma_integrand
@@ -72,18 +86,6 @@ public:
     void SetIndex(int m)
     {
         this->m_index = m;
-    }
-
-    /// Real part of gamma factor appearing in the tight-binding Hamiltonian
-    double Re_Gamma (double kx, double ky)
-    {
-        return 1.0 + 2.0*cos(0.5*sqrt(3.0)*kx)*cos(0.5*3.0*ky);
-    }
-
-    /// Imaginary part of gamma factor appearing in the tight-binding Hamiltonian
-    double Im_Gamma (double kx, double ky)
-    {
-        return 2.0*cos(0.5*sqrt(3.0)*kx)*sin(0.5*3.0*ky);
     }
 
 };
