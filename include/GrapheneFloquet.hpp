@@ -139,16 +139,17 @@ arma::vec QuasiEnergies(double kx, double ky, double omega, double E0,
     auto Gamma = GammaValues(kx,ky,omega,E0,2*blocks);
 
     // Initialize Tmatrix which is to be filled by [totalblocks] 2 x 2 matrices
-    arma::cx_mat Ham(2*totalblocks,2*totalblocks, arma::fill::zeros); // Hamiltonian
+    arma::Mat<double> zeromat(2*totalblocks,2*totalblocks, arma::fill::zeros);
+    arma::cx_mat Ham(zeromat,zeromat); // Hamiltonian
 
     // FILL MAIN DIAGONAL OF HAMILTONIAN
     // Initialize index m
     int m = -blocks;
 
-    for (int i_= 0; i_ < 2*totalblocks; i_ = i_ + 2)
+    for (int j_= 0; j_ < 2*totalblocks; j_ = j_ + 2)
     {
-        Ham.diag(0)[i_] = m*freq;
-        Ham.diag(0)[i_ + 1] = m*freq;
+        Ham.diag(0)[j_] = m*freq;
+        Ham.diag(0)[j_ + 1] = m*freq;
 
         // Increment m
         m++;
@@ -159,33 +160,112 @@ arma::vec QuasiEnergies(double kx, double ky, double omega, double E0,
     int nm = 0; // Initialize index (n-m)
     int index_shift = 2*blocks; // Index shift (for gamma vector)
 
-    for (int i_= 1; i_ < 2*totalblocks - 1; i_ ++) // Loop on diagonals
+    for (int i_= 1; i_ < 2*totalblocks; i_ = i_ + 2) // Loop on diagonals
     {
-        if (i_ % 2 != 0) // If i is odd do, else leave zero
+        int index0 = nm;
+        int index1 = nm + 1;
+
+        //std::cout << i_ << std::endl;
+
+        for (int j_ = 0; j_ < 2*totalblocks - i_; j_ ++) // Loop on elements of diagonals
         {
-            int index0 = nm;
-            int index1 = nm + 1;
 
-            for (int j_ = 0; j_ < 2*totalblocks - i_; j_ ++) // Loop on elements of diagonals
+            //std::cout << j_ << std::endl;
+
+            if (j_ % 2 == 0) // If j_ is even do
             {
-                if (j_ % 2 == 0) // If j_ is even do
-                {
-                    Ham.diag( i_)[j_] = tb*std::conj(Gamma[-index0 + index_shift]);
-                    Ham.diag(-i_)[j_] = tb*Gamma[index0 + index_shift];
+                Ham.diag( i_)[j_] = tb*std::conj(Gamma[-index0 + index_shift]);
+                Ham.diag(-i_)[j_] = tb*Gamma[index0 + index_shift];
 
-                }
-                else // If j_ is odd do
-                {
-                    Ham.diag( i_)[j_] = tb*Gamma[-index1 + index_shift];
-                    Ham.diag(-i_)[j_] = tb*std::conj(Gamma[index1 + index_shift]);
-                }
+                //std::cout << "Even j" << std::endl;
+                //std::cout << Ham.diag( i_)[j_] << std::endl;
+                //std::cout << Ham.diag( -i_)[j_] << std::endl;
+
             }
+            else // If j_ is odd do
+            {
+                Ham.diag( i_)[j_] = tb*Gamma[-index1 + index_shift];
+                Ham.diag(-i_)[j_] = tb*std::conj(Gamma[index1 + index_shift]);
 
-            nm++; // Increment (n-m) as we shift to the next non-zero diagonal
+                //std::cout << "Odd j" << std::endl;
+                //std::cout << Ham.diag( i_)[j_] << std::endl;
+                //std::cout << Ham.diag( -i_)[j_] << std::endl;
+            }
         }
+
+        nm++; // Increment (n-m) as we shift to the next non-zero diagonal
 
     }
 
-    /*** CONTINUE CODING QUASI-ENERGIES HERE ***/
+    // std::cout << Ham << std::endl;
+
+    // arma::mat realpart = arma::real(Ham);
+    // arma::mat imagpart = arma::imag(Ham);
+
+    // realpart.save("Hamreal.dat",arma::raw_ascii);
+    // imagpart.save("Hamimag.dat",arma::raw_ascii);
+
+    // Initialize eigenvalue vector and eigenvector matrix and
+    arma::vec eigval;
+    arma::cx_mat eigvec;
+
+    // Compute eigenvalues
+    bool status = arma::eig_sym(eigval, eigvec, Ham);
+    if (status == false)
+    {
+        std::cout << "Eigenvalue decomposition failed" << std::endl;
+    }
+
+    std::cout << eigvec << std::endl;
+
+    // COMPUTE TRANSITION PROBABILITY
+
+    // Variables to be used in loop
+    prob = 0.0;
+    prob_sigma = 0.0; // Passed by reference, will change
+    std::complex<double> alphazero, betazero; // Ground state amplitude
+    std::complex<double> alphan, betan; // Excited state amplitude
+    std::complex<double> pos; // Positive energy state amplitude
+    std::complex<double> neg; // Negative energy state amplitude
+    arma::cx_vec the_eigenvec;
+
+    // Compute "no-field" phase factor
+    double angle = std::atan2(Im_Gamma(kx,ky), Re_Gamma(kx,ky) );
+    std::complex<double> phase_factor = std::exp(1i*angle);
+
+    // Loop on every eigenvector
+    for (size_t i_= 0; i_ < eigvec.n_cols; i_ ++)
+    {
+        the_eigenvec = eigvec.col(i_); // Slice eigenvectors
+
+        alphazero = the_eigenvec[the_eigenvec.n_elem/2 - 1];
+        betazero = the_eigenvec[the_eigenvec.n_elem/2];
+
+        // Negative energy state
+        neg = 0.5*std::sqrt(2.0)*(alphazero - phase_factor*betazero);
+
+        // Loop on elements
+        for (size_t j_= 0; j_ < the_eigenvec.n_elem; j_ ++)
+        {
+
+            if (j_ % 2 != 0) // If j is odd do, else do nothing
+            {
+                alphan = the_eigenvec[j_ - 1];
+                betan  = the_eigenvec[j_];
+
+                // Positive energy state
+                pos = 0.5*std::sqrt(2.0)*(alphan + phase_factor*betan);
+
+                // Fermi's rule
+                prob += std::norm(std::conj(pos)*neg)*std::norm(std::conj(pos)*neg); // Transition between eigenstates
+                prob_sigma += std::norm(std::conj(betan)*alphazero)*std::norm(std::conj(betan)*alphazero); // Transition between sigma_z eigenstates
+            }
+        }
+    }
+
+
+    return eigval;
+
+
 
 }
