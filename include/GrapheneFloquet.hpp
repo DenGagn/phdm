@@ -70,7 +70,7 @@ public:
         double factor = lat_constant*m_E0/(hbar*m_omega);
 
         // Peierls substitution
-        double kx_field = m_kx + factor*std::sin(t);
+        double kx_field = m_kx + factor*std::cos(t);
         double ky_field = m_ky;
 
         // Compute gamma factors
@@ -129,7 +129,7 @@ arma::vec QuasiEnergies(double kx, double ky, double omega, double E0,
     double v_Fermi = 0.003646*2.9979245800e+08;                 // Fermi velocity in graphene
 
     double freq = hbar*omega;                        // Frequency in eV
-    double tb = - 2*hbar/(3.0*v_Fermi*lat_constant); // Tight-binding energy of graphene
+    double tb = - 2*(hbar*v_Fermi)/(3.0*lat_constant); // Tight-binding energy of graphene
 
     // Total number of blocks including
     // zeroth block
