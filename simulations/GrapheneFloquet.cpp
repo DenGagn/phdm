@@ -29,17 +29,17 @@ int main(int argc, char *argv[])
     // Problem parameters
     double freq  =          std::stof(pt.get<std::string>("Parameters.frequency"));  // Angular frequency in Hz
     double E0 =             std::stof(pt.get<std::string>("Parameters.E0"));         // Peak electric field in V/m
-    unsigned int nblocks =  std::stoi(pt.get<std::string>("Parameters.nblocks"));    // Envelope frequency, in units of freq
+    size_t nblocks =  std::stoi(pt.get<std::string>("Parameters.nblocks"));    // Envelope frequency, in units of freq
 
     // Parameter sweep
     double xmin =   std::stof(pt.get<std::string>("Sweep.xmin")); // Minimum frequency in sweep
     double xmax =   std::stof(pt.get<std::string>("Sweep.xmax")); // Minimum frequency in sweep
-    int x_elem =    std::stoi(pt.get<std::string>("Sweep.xnum"));
+    size_t x_elem =    std::stoi(pt.get<std::string>("Sweep.xnum"));
 
     // Parameter sweep
     double ymin =   std::stof(pt.get<std::string>("Sweep.ymin")); // Minimum frequency in sweep
     double ymax =   std::stof(pt.get<std::string>("Sweep.ymax")); // Minimum frequency in sweep
-    int y_elem =    std::stoi(pt.get<std::string>("Sweep.ynum"));
+    size_t y_elem =    std::stoi(pt.get<std::string>("Sweep.ynum"));
 
     // Process input variables (angular frequency units)
     double omega = 2.0*M_PI*freq;     // Angular frequency
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     auto quasi2 = arma::mat(y_elem,x_elem);
 
     // Variables for loops
-    unsigned id, id2;
+    size_t id, id2;
     double prob = 0.0;
     double prob_sigma = 0.0; // Trans. prob. between sigma_z eigenstates
 
