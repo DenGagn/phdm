@@ -2,7 +2,8 @@
 
 #include <armadillo>
 
-typedef arma::Col<arma::cx_double> state_type; // Type of container used to hold the state vector
+using namespace std::complex_literals; // Complex numbers
+typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
 /*!
 * \class base_sine
@@ -50,7 +51,7 @@ public:
     {
 
         // Conversion factor
-        double factor = m_E0/(hbar*m_omega);
+        double factor = 1.0e-10*m_E0/(hbar*m_omega); // Multiply by a characteristic length of 1 A
 
         // Peierls substitution
         double kx_field = m_kx + factor*Gx(t);
@@ -61,8 +62,16 @@ public:
         auto Gamma1_field = Gamma1(kx_field, ky_field);
 
         // The ODE system
-        dzdt[0] = -1j*(1.0/hbar)*(Gamma0_field*z[0] + Gamma1_field*z[1]);
-        dzdt[1] = -1j*(1.0/hbar)*(std::conj(Gamma1_field)*z[0] + Gamma0_field*z[1]);
+        std::complex<double> z0 = z[0] + 1i*z[1];
+        std::complex<double> z1 = z[2] + 1i*z[3];
+
+        std::complex<double> dzdt0 = -1i*(1.0/hbar)*(Gamma0_field*z0 + Gamma1_field*z1);
+        std::complex<double> dzdt1 = -1i*(1.0/hbar)*(std::conj(Gamma1_field)*z0 + Gamma0_field*z1);
+
+        dzdt[0] = std::real(dzdt0);
+        dzdt[1] = std::imag(dzdt0);
+        dzdt[2] = std::real(dzdt1);
+        dzdt[3] = std::imag(dzdt1);
 
     }
 
@@ -129,7 +138,7 @@ public:
     /// Gamma1 factor appearing in the tight-binding Hamiltonian
     std::complex<double> Gamma1(double kx, double ky)
     {
-        return d1 + 1j*chi*ky + gx*kx*kx + gy*ky*ky;
+        return d1 + 1i*chi*ky + gx*kx*kx + gy*ky*ky;
     }
 
 
