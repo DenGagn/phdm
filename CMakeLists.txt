@@ -92,3 +92,7 @@ install(TARGETS "GrapheneExpDirac.o" RUNTIME DESTINATION bin)
 add_executable("GrapheneFloquet.o" "simulations/GrapheneFloquet.cpp")
 target_link_libraries("GrapheneFloquet.o" ${LIBS})
 install(TARGETS "GrapheneFloquet.o" RUNTIME DESTINATION bin)
+
+add_executable("PhosphoreneSine.o" "simulations/PhosphoreneSine.cpp")
+target_link_libraries("PhosphoreneSine.o" ${LIBS})
+install(TARGETS "PhosphoreneSine.o" RUNTIME DESTINATION bin)
