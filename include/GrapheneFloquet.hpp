@@ -257,8 +257,8 @@ arma::vec QuasiEnergies(double kx, double ky, double omega, double E0,
                 pos = 0.5*std::sqrt(2.0)*(alphan + phase_factor*betan);
 
                 // Fermi's rule
-                prob += std::norm(std::conj(pos)*neg)*std::norm(std::conj(pos)*neg); // Transition between eigenstates
-                prob_sigma += std::norm(std::conj(betan)*alphazero)*std::norm(std::conj(betan)*alphazero); // Transition between sigma_z eigenstates
+                prob += std::norm(std::conj(pos)*neg); // Transition between eigenstates
+                prob_sigma += std::norm(std::conj(betan)*alphazero); // Transition between sigma_z eigenstates
             }
         }
     }
