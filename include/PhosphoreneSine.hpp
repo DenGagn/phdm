@@ -5,6 +5,8 @@
 using namespace std::complex_literals; // Complex numbers
 typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
+namespace phosphorene {
+
 /*!
 * \class base_sine
 *
@@ -143,3 +145,5 @@ public:
 
 
 };
+
+}

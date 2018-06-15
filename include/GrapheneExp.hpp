@@ -2,6 +2,8 @@
 
 typedef std::vector< double > state_type; // Type of container used to hold the state vector
 
+namespace graphene {
+
 /*!
 * \class base_exp
 *
@@ -148,3 +150,5 @@ public:
         return -1.5*ky;
     }
 };
+
+}

@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
         {
 
             // Initialize tight-binding model
-            tight_binding_sine model(xvec[id2],yvec[id],omega,a,E0);
+            graphene::tight_binding_sine model(xvec[id2],yvec[id],omega,a,E0);
 
             // Prepare initial states (negative and positive eigenstates)
             state_type psi = EigenState(model, xvec[id2], yvec[id], -1.0);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     outfile << std::scientific << std::setprecision(10);
 
     // Create tight binding object
-    tight_binding_sine model(0.0,0.0,omega,a,E0);
+    graphene::tight_binding_sine model(0.0,0.0,omega,a,E0);
 
     for (size_t i=0; i < numtimes; i++)
     {

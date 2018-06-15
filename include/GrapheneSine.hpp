@@ -10,6 +10,9 @@ typedef std::vector< double > state_type; // Type of container used to hold the 
 *
 * \author Author: D. Gagnon <denisg6@hotmail.com>
 */
+
+namespace graphene {
+
 class base_sine {
 
     // Parameters of the Hamiltonian
@@ -165,3 +168,5 @@ public:
 
 
 };
+
+}
