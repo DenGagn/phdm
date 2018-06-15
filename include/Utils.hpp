@@ -83,7 +83,10 @@ state_type EigenStateGeneral(T model, double kx, double ky, bool pos=true)
 
     // Normalisation constant
     double norm_const
-        = 1.0/(std::norm(the_eigenvector(0)) + std::norm(the_eigenvector(1)));
+        = 1.0/sqrt(std::norm(the_eigenvector(0)) + std::norm(the_eigenvector(1)));
+
+    //std::cout << the_eigenvector(0) << std::endl;
+
 
     // Assign values of the eigenstate
     state_type eigen = {0.0,0.0,0.0,0.0};
