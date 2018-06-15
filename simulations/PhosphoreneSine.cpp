@@ -23,7 +23,7 @@
 #include <boost/numeric/odeint.hpp>
 
 #include "PhosphoreneSine.hpp"
-#include "UtilsComplex.hpp"
+#include "Utils.hpp"
 
 /// Main function
 int main(int argc, char *argv[])
@@ -77,8 +77,8 @@ int main(int argc, char *argv[])
             tight_binding_sine model(xvec[id2],yvec[id],omega,a,E0);
 
             // Prepare initial states (negative and positive eigenstates)
-            state_type psi = EigenState(model, xvec[id2], yvec[id], false);
-            state_type eigen_p = EigenState(model, xvec[id2], yvec[id], true);
+            state_type psi = EigenStateGeneral(model, xvec[id2], yvec[id], false);
+            state_type eigen_p = EigenStateGeneral(model, xvec[id2], yvec[id], true);
 
             // Integrate
             size_t steps = boost::numeric::odeint::integrate( model,
