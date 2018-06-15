@@ -146,4 +146,48 @@ public:
 
 };
 
+/*!
+* \class kp_sine
+*
+* \brief k.p. model for phosphorene (RHS of ODE system)
+*
+* NOT YET IMPLEMENTED, TO BE ADDED LATER
+*
+* The excitation
+* is a few-cycle sine wave with variable duration and amplitude, but zero
+* carrier-envelope phase
+*
+*/
+class kp_sine : public base_sine {
+
+private:
+    // Tight-binding constant definitions (see http://arxiv.org/abs/1710.05808)
+    // NOT YET IMPLEMENTED, TO BE ADDED LATER
+
+public:
+    /// Constructor taking as input the parameters of the  Hamiltonian (tight-binding specialization)
+    /// @param kx float, x-component of the momentum
+    /// @param ky float, y-component of the momentum
+    /// @param omega float, angular frequency of the field in rad/s
+    /// @param a float, envelope frequency (normalized)
+    /// @param E0 float, electric field peak value in V/m
+    /// @param ellip float, ellipticity of the field in the circularly polarized case
+    kp_sine(double kx, double ky, double omega, double a, double E0, double ellip=0.0 ) :
+        base_sine(kx, ky, omega, a, E0, ellip ) {}
+
+    /// Gamma0 factor appearing in the tight-binding Hamiltonian
+    std::complex<double> Gamma0(double kx, double ky)
+    {
+        return 0.0;
+    }
+
+    /// Gamma1 factor appearing in the tight-binding Hamiltonian
+    std::complex<double> Gamma1(double kx, double ky)
+    {
+        return 0.0;
+    }
+
+
+};
+
 }
